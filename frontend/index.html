@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Legislative Document Summarizer</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Using FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-area">
+                <h1><i class="fas fa-scale-balanced"></i>Real-time legislative summarization</h1>
+                <p>Understand Government Bills in Simple Language</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#upload-section"><i class="fas fa-file-upload"></i> Upload</a></li>
+                    <li><a href="#chat-section"><i class="fas fa-comments"></i> Chat</a></li>
+                    <li><a href="#reminder-section"><i class="fas fa-bell"></i> Reminders</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" id="home">
+        <div class="left-panel">
+            <!-- Upload Section -->
+            <section id="upload-section" class="card">
+                <h2><i class="fas fa-file-alt"></i> Upload Document</h2>
+                <div class="upload-area" id="drop-zone">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p>Drag & drop or click to upload</p>
+                    <span class="file-types">Supported formats: JPG, PNG, PDF</span>
+                    <input type="file" id="file-input" accept=".jpg, .png, .pdf" hidden>
+                </div>
+                <div class="selected-file" id="selected-file-name"></div>
+                <button id="scan-btn" class="primary-btn" disabled><i class="fas fa-search"></i> Scan and
+                    Summarize</button>
+
+                <div id="loading-spinner" class="hidden">
+                    <div class="spinner"></div>
+                    <p>Scanning and simplifying document...</p>
+                </div>
+            </section>
+
+            <!-- Summary Output Section -->
+            <section id="summary-section" class="card hidden">
+                <h2><i class="fas fa-file-contract"></i> Document Summary</h2>
+                <div class="controls">
+                    <button id="read-aloud-btn" class="secondary-btn"><i class="fas fa-volume-up"></i> Read
+                        Aloud</button>
+                    <div class="translation-buttons">
+                        <button class="translate-btn" data-lang="en">English</button>
+                        <button class="translate-btn" data-lang="te">Telugu</button>
+                        <button class="translate-btn" data-lang="hi">Hindi</button>
+                    </div>
+                </div>
+                <div id="summary-content" class="text-container">
+                    <!-- Summary placeholder -->
+                </div>
+            </section>
+
+            <!-- Reminder Section -->
+            <section id="reminder-section" class="card">
+                <h2><i class="fas fa-calendar-alt"></i> Set Reminders</h2>
+                <form id="reminder-form">
+                    <div class="form-group">
+                        <label for="bill-name">Bill/Document Name</label>
+                        <input type="text" id="bill-name" placeholder="e.g., Data Protection Bill" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reminder-date">Remind Date</label>
+                        <input type="date" id="reminder-date" required>
+                    </div>
+                    <button type="submit" class="primary-btn"><i class="fas fa-plus"></i> Set Reminder</button>
+                </form>
+                <div class="reminder-list">
+                    <h3>Your Reminders</h3>
+                    <ul id="reminders-container">
+                        <!-- Reminders will safely go here -->
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <div class="right-panel">
+            <!-- Chatbot Assistant -->
+            <section id="chat-section" class="card chatbot-card">
+                <div class="chat-header">
+                    <h2><i class="fas fa-robot"></i> AI Legal Assistant</h2>
+                    <span class="status-dot"></span>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot">
+                        <p>Hi! I can help you understand the document faster. Ask me things like:</p>
+                        <ul>
+                            <li>"What does this bill mean?"</li>
+                            <li>"What are the key points?"</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Type your question...">
+                    <button id="send-chat-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>This tool simplifies complex legislative documents using AI.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
