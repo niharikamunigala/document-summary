@@ -44,12 +44,14 @@ router.post('/', async (req, res) => {
             
             // Provide more specific error messages
             let errorMsg = grokError.message;
-            if (grokError.message.includes('401') || grokError.message.includes('403')) {
-                errorMsg = 'API Key Error: Please check your Grok API key in the backend (.env GROK_API_KEY)';
+            if (grokError.message.includes('Incorrect API key')) {
+                errorMsg = '🔑 Invalid Grok API Key: Get a valid key from https://console.x.ai and update it in backend/.env';
+            } else if (grokError.message.includes('401') || grokError.message.includes('403')) {
+                errorMsg = '🔑 API Authentication Error: Please check your Grok API key in backend/.env';
             } else if (grokError.message.includes('429')) {
-                errorMsg = 'API Rate Limit: Too many requests to Grok API, please wait a moment and try again';
+                errorMsg = '⏱️ API Rate Limit: Too many requests to Grok API, please wait and try again';
             } else if (grokError.message.includes('Invalid response')) {
-                errorMsg = 'Unexpected response from Grok API';
+                errorMsg = '⚠️ Unexpected response from Grok API';
             }
             
             res.status(500).json({ error: errorMsg });

@@ -4,9 +4,13 @@ require('dotenv').config();
 const apiKey = process.env.GROK_API_KEY;
 if (!apiKey) {
     console.error('\n✗ CRITICAL: GROK_API_KEY not found in .env file!');
+    console.error('📍 Fix: Add GROK_API_KEY to backend/.env');
+    console.error('🔗 Get your key at: https://console.x.ai\n');
     process.exit(1);
-} else if (apiKey === 'your_api_key_here') {
+} else if (apiKey === 'your_valid_grok_api_key_here' || apiKey === 'your_api_key_here') {
     console.error('\n✗ CRITICAL: GROK_API_KEY still has placeholder value!');
+    console.error('📍 Fix: Replace the placeholder with your actual API key');
+    console.error('🔗 Get your key at: https://console.x.ai\n');
     process.exit(1);
 }
 
