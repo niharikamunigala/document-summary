@@ -207,6 +207,17 @@ nav a:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+.danger-btn {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #ff6b6b;
+}
+
+.danger-btn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.7);
+}
+
 /* Upload Section */
 .upload-area {
     border: 2px dashed rgba(96, 165, 250, 0.3);
@@ -285,6 +296,17 @@ nav a:hover {
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
     gap: 1rem;
+}
+
+.audio-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.audio-controls button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
 }
 
 .translation-buttons {

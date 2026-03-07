@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryContent = document.getElementById('summary-content');
 
     const readAloudBtn = document.getElementById('read-aloud-btn');
+    const stopAudioBtn = document.getElementById('stop-audio-btn');
     const translateBtns = document.querySelectorAll('.translate-btn');
 
     // Chatbot elements
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     let currentLanguage = 'en';
+    let isSpeaking = false;
 
     // === 1. File Upload Logic ===
 
@@ -162,23 +164,75 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.translate-btn[data-lang="en"]').classList.add('active');
 
     // === 4. Read Aloud Logic (SpeechSynthesis API) ===
+    
+    function stopSpeech() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            isSpeaking = false;
+            readAloudBtn.classList.remove('hidden');
+            stopAudioBtn.classList.add('hidden');
+            readAloudBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
+        }
+    }
+
     readAloudBtn.addEventListener('click', () => {
         if ('speechSynthesis' in window) {
-            // Stop any current reading
+            if (isSpeaking) {
+                // If already speaking, stop it
+                stopSpeech();
+                return;
+            }
+
+            // Stop any current reading first
             window.speechSynthesis.cancel();
 
             const textToRead = summaryContent.textContent;
             const utterance = new SpeechSynthesisUtterance(textToRead);
 
-            // Basic language mapping for speech synthesis
-            if (currentLanguage === 'en') utterance.lang = 'en-US';
-            if (currentLanguage === 'te') utterance.lang = 'te-IN';
-            if (currentLanguage === 'hi') utterance.lang = 'hi-IN';
+            // Set language for speech synthesis
+            if (currentLanguage === 'en') {
+                utterance.lang = 'en-US';
+            } else if (currentLanguage === 'te') {
+                utterance.lang = 'te-IN';
+                utterance.pitch = 1.0;
+                utterance.rate = 1.0;
+            } else if (currentLanguage === 'hi') {
+                utterance.lang = 'hi-IN';
+                utterance.pitch = 1.0;
+                utterance.rate = 1.0;
+            }
+
+            utterance.onstart = () => {
+                isSpeaking = true;
+                readAloudBtn.classList.add('hidden');
+                stopAudioBtn.classList.remove('hidden');
+                console.log('🔊 Started speaking');
+            };
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                readAloudBtn.classList.remove('hidden');
+                stopAudioBtn.classList.add('hidden');
+                console.log('✓ Finished speaking');
+            };
+
+            utterance.onerror = (event) => {
+                console.error('❌ Speech error:', event.error);
+                isSpeaking = false;
+                readAloudBtn.classList.remove('hidden');
+                stopAudioBtn.classList.add('hidden');
+            };
 
             window.speechSynthesis.speak(utterance);
         } else {
             alert("Sorry, your browser doesn't support text to speech!");
         }
+    });
+
+    // Stop audio button
+    stopAudioBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        stopSpeech();
     });
 
     // === 5. Chatbot Logic ===
