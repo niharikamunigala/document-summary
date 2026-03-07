@@ -120,8 +120,18 @@ router.post('/', (req, res, next) => {
         } catch (grokError) {
             console.error('✗ Grok API Error:', grokError.message);
             
+            // Check if it's an API key issue
+            const isKeyError = grokError.message.includes('Incorrect API key') || 
+                              grokError.message.includes('Invalid API key') ||
+                              grokError.message.includes('401') ||
+                              grokError.message.includes('403');
+            
             // FALLBACK: If Grok fails, use extracted text as summary
-            console.log('\nFallback: Using extracted text as summary...');
+            console.log('\n⚠️  Fallback: Using extracted text as summary...');
+            if (isKeyError) {
+                console.log('📝 Note: Grok API key appears to be invalid');
+                console.log('📋 Get a valid key from: https://console.x.ai');
+            }
             
             // Still try to save to database
             try {
@@ -146,11 +156,13 @@ router.post('/', (req, res, next) => {
             }
 
             // Return extracted text as summary instead of failing
-            console.log('\n✓ FALLBACK COMPLETE\n');
+            console.log('\n✓ FALLBACK COMPLETE - File processed with OCR\n');
             res.json({ 
                 summary: extractedText,
                 documentId: global.latestDocumentId,
                 fallback: true,
+                fallbackReason: isKeyError ? 'Invalid Grok API Key' : 'Grok API Error',
+                message: isKeyError ? 'Update GROK_API_KEY in backend/.env with a valid key from https://console.x.ai' : 'Summarization failed, showing extracted text instead',
                 grokError: grokError.message
             });
         }
